@@ -1,0 +1,80 @@
+When designing with patterns your best bet is to write the interfaces that help yo define the pattern and after that implement them to solve your specific problem.
+
+OO Principles
+
+1) Encapsulate what varies - >take the code that changes and put it in a new class. Then inherit the class.
+2) favor composition over inheritance. Instead of inheriting a class, implement an interface. This interface is in turn implemented by tha class that has the variyng code. You can then just put this class in the original class, think of list - arraylist.
+3) Program to interfaces, not implementations.
+4) Strive for loosely coupled designs between objects that interact.
+5) Classes should be open for extension, but closed for modification.
+6) Dependency inversion -> depend on abstractions, not on implementations.
+	Guidelines
+	no variable should hold a ref to a concrete class
+	no class should derive from a concrete class
+	no overwriting already implemented methods.
+7) Least knowledge (Law of Demeter) -> talk only to your immediate friends.
+	only invoke methods of the current class, any passed in objects or objects that were created in the current class.
+	Don't call methods on objects returned from calling other methods. example @317-318
+8) Hollywood principle: Don't calls us, we'll call you. The subclasses are called by the abstract/interface when they are required.
+9) a class should only have one reason to change also caleed the single responsibility principle.
+
+1) Strategy pattern (flying/quacking behavior in ducks) - Defines a family of algorithms, encapsulates each one and makes them interchangeable. 
+Strategy lets the algorithm vary independently from clients that use it.
+This is a flexible alternative to subclassing.
+
+2) Observer pattern (newspaper subscription) defines a one to many relation between objects so that when one object's state changes (subject), all of it's dependants (observers) 
+are notified and updated automatically. Weather-O-Rama
+Class diagram @ 103
+
+3) Decorator pattern @131
+(starbuzz coffee) attaches additional responsibilities to an object dynamically.  Decorators provide a flexible alternative to subclassing for extending functionality.
+Class diag @143
+
+4) Static factory moves the creation code from the class to an abstract class that is it. 
+factory method pattern defines an interface for creating an object, but lets  subclasses decide which class to instantiate. The creator class implements all the methods necessary for obect manipulation, but the actual object is created by a subclass. The concrete creator (subclass of the creator)produces the product which is an an implementation of the interface that the creator uses to manipulate the object.
+Factory pattern diagram @p186.
+Use this design on classes that are going to change.
+Abstract factory - provides an interface for a family of products (our case all the ingredients for the pizza). Allows creation of factories for specific locales, os or looks and feel.
+
+5) Singleton -> for thread safety you can sync the getInstance of the init the instance from the start; and there  is double checked implementation (with volatile) for java 1.5 and up.
+
+6) Command pattern (the remote control app) -> encapsulates a request in an object (behind the object execute method), allowing the parameterization of other 
+	objects (the remote takes the command object) with different requests, queue of log requests and other operations.
+	Class diagram at page 259.
+	There is a mention of the null object (the NoCommand object doesn't do anything, but prevents the need to treat null)
+	A macro command is just an object that hold many commands.
+	This pattern can be implemented to create job queues processed by multiple threads.
+	Also,using extra methods (store, load) logging of the request can be achieved. In case of transactions, between 2 checkpoints the operations are logged. If the session fails, you're thrown back tothe last
+	checkpoint. Just load all the stored operations and go from there. When the new checkpoint is reached, flush the log cache.
+	
+7) Adapter pattern (turkey quaking and flying like a duck)
+	Converts the interface of a class to another interface that is expected by the client. Class diagram at page 294.
+	Facade pattern (watching a movie on a home theater with popcorn) -> provides a unified interface to a set of interfaces/subsystems.
+	
+8) template method pattern (having the same way of preparing tea an coffee). Also think of the game implementation.
+	Defines the steps of an algorithm and forces the subclasses to define one or more steps.
+	You can have "hooks" in the template method.
+	Arrays.sort() uses this pattern. In order to use sort on an object you need to implement Comparable. You need to do this because behind the scenes the objects that are going into the sort method are cast to Comparable before sorting.
+
+9) Iterator/composite patterns
+	iterator class diag @p387
+	Iterator pattern provides a way of accessing an aggregate object sequentially without exposing its underlying representation.
+	
+	Composite pattern - allows us to compose objects into tree structures (nodes have children, leafs don't) cd @p408
+	
+10) State pattern (implement a state machine) @p410
+Create an interface (State) that defines all the possible actions of the machine. Each state of the machine is a class that implements this interface.
+Allows an object to change its behavior when its internal state changes.
+
+11) The proxy pattern intercepts a method call that a client does on a subject. Class diagram @511. 
+3 types of proxies: remote (as shown above), virtual (the resource is expensive to create), protection (uses access rights).
+Remote: uses RMI to make remote method invocations. RMI requires that you have an interface extending Remote and then the class that does the work 
+extends unicastremoteobject and implements the interface form before. You need to create the class stubs with rmic (from java 5 not necessary) and also start the remote registry. nd then, from the client use 
+Naming.lookup to get a reference to the remote interface and invoke methods on it. Remember that all the returned objects must be serializable (just implement the serializable interface, and if you don't need all their contents make them transient).
+
+An application for virtual proxy is an imageproxy (where you load an image from the internet, but in the meanwhile you display a loading message)
+
+The protection proxy is implemented with javaAPI (dynmic proxy). @524
+
+A pattern is a solution to a problem in a context.
+An antipattern tells how to go ffrom a problem to a BAD solution. 
